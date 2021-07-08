@@ -7,11 +7,9 @@ WORKDIR /workspace
 RUN apt-get update --fix-missing -o Acquire::http::No-Cache=True
 RUN apt-get -y -q install wget vim cmake git 
 
-# SHELL ["/bin/bash", "--login", "-c"]
-
 # Anaconda Install
-# RUN wget https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/Anaconda3-5.2.0-Linux-x86_64.sh -O ~/Anaconda3-5.2.0-Linux-x86_64.sh
-COPY Anaconda3-2020.02-Linux-x86_64.sh ./Anaconda3-2020.02-Linux-x86_64.sh
+RUN wget https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/Anaconda3-5.2.0-Linux-x86_64.sh -O ~/Anaconda3-5.2.0-Linux-x86_64.sh
+#COPY Anaconda3-2020.02-Linux-x86_64.sh ./Anaconda3-2020.02-Linux-x86_64.sh
 RUN bash ./Anaconda*.sh -b -p ~/anaconda3 \
 	&& rm ./Anaconda*.sh 
 RUN \
@@ -28,17 +26,15 @@ conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/
 conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
 RUN conda config --set show_channel_urls yes
 RUN conda config --set offline true
-
 ENV PATH ~/anaconda3/bin:$PATH
 RUN echo "conda deactivate" >> ~/.bashrc
 # RUN echo "/opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc
-# RUN conda init bash
 
 # ViT
 RUN conda create -n vit -y
 SHELL ["conda", "run", "-n", "vit", "/bin/bash", "-c"]
-# RUN git clone https://github.com/google-research/vision_transformer.git
-COPY vision_transformer ./vision_transformer
+RUN git clone https://github.com/google-research/vision_transformer.git
+#COPY vision_transformer ./vision_transformer
 RUN pip install -i https://mirrors.huaweicloud.com/repository/pypi/simple pip -U
 RUN pip config set global.index-url https://mirrors.huaweicloud.com/repository/pypi/simple
 RUN pip install -r ./vision_transformer/vit_jax/requirements.txt 
@@ -53,7 +49,6 @@ RUN pip config set global.index-url https://mirrors.huaweicloud.com/repository/p
 RUN pip install tensor2tensor
 RUN pip install prompt_toolkit==2.0.9
 RUN python -m ipykernel install --user --name t2t --display-name "T2T"
-
 
 # Trax - Pretrained T2T
 RUN conda create -n trax -y
