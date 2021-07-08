@@ -10,8 +10,7 @@ RUN apt-get -y -q install wget vim cmake git
 # Anaconda Install
 RUN wget https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/Anaconda3-5.2.0-Linux-x86_64.sh -O ~/Anaconda3-5.2.0-Linux-x86_64.sh
 #COPY Anaconda3-2020.02-Linux-x86_64.sh ./Anaconda3-2020.02-Linux-x86_64.sh
-RUN bash ./Anaconda*.sh -b -p ~/anaconda3 \
-	&& rm ./Anaconda*.sh 
+RUN bash ./Anaconda*.sh -b -p ~/anaconda3
 RUN \
 conda config --add channels https://mirrors.ustc.edu.cn/anaconda/pkgs/main/ && \
 conda config --add channels https://mirrors.ustc.edu.cn/anaconda/pkgs/free/ && \
